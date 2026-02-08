@@ -121,6 +121,13 @@
                         📤 分享結果
                     </button>
                 </div>
+                <!-- 匯出按鈕 -->
+                <div class="flex flex-col sm:flex-row gap-2 justify-center mt-4">
+                    <span class="text-sm text-gray-500 self-center">匯出結果：</span>
+                    <button onclick="exportResults('json')" class="px-4 py-1 bg-gray-200 text-gray-700 rounded-full hover:bg-gray-300 transition text-sm">JSON</button>
+                    <button onclick="exportResults('csv')" class="px-4 py-1 bg-gray-200 text-gray-700 rounded-full hover:bg-gray-300 transition text-sm">CSV</button>
+                    <button onclick="exportResults('markdown')" class="px-4 py-1 bg-gray-200 text-gray-700 rounded-full hover:bg-gray-300 transition text-sm">Markdown</button>
+                </div>
             </div>
         </div>
     </div>
