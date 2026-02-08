@@ -36,14 +36,15 @@ function startQuiz(mode) {
 // Prepare questions based on mode
 function prepareQuestions(mode) {
     const questions = [];
+    let questionId = 0;
     
     quizData.stories.forEach(story => {
         if (mode === 'short') {
-            // 隨機選 2 題，但保留原始索引
             const indexed = story.items.map((item, idx) => ({...item, originalIndex: idx}));
             const shuffled = indexed.sort(() => Math.random() - 0.5);
             shuffled.slice(0, 2).forEach((item) => {
                 questions.push({
+                    questionId: questionId++,
                     storyId: story.id,
                     storyName: story.name,
                     storyNameZh: story.nameZh,
@@ -57,6 +58,7 @@ function prepareQuestions(mode) {
         } else {
             story.items.forEach((item, idx) => {
                 questions.push({
+                    questionId: questionId++,
                     storyId: story.id,
                     storyName: story.name,
                     storyNameZh: story.nameZh,
