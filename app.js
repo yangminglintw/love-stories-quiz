@@ -179,6 +179,7 @@ function calculateScores() {
                 categoryZh: story.categoryZh,
                 description: story.description,
                 descriptionZh: story.descriptionZh,
+                longDescriptionZh: story.longDescriptionZh || story.descriptionZh,
                 average: Math.round(average * 10) / 10,
                 count: storyAnswers.length
             };
@@ -216,8 +217,7 @@ function renderTopStories(topFive) {
                     <span class="text-gray-400 text-sm">/9</span>
                 </div>
             </div>
-            <p class="text-sm text-gray-600">${data.descriptionZh}</p>
-            <p class="text-xs text-gray-400 mt-1">${data.description}</p>
+            <p class="text-sm text-gray-600">${data.longDescriptionZh}</p>
         `;
         
         container.appendChild(card);
