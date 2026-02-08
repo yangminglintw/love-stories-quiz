@@ -107,6 +107,9 @@ function renderQuestion() {
     
     document.getElementById('prev-btn').disabled = currentIndex === 0;
     
+    // 清除任何 focus 狀態
+    if (document.activeElement) document.activeElement.blur();
+    
     document.getElementById('question-card').classList.remove('fade-in');
     void document.getElementById('question-card').offsetWidth;
     document.getElementById('question-card').classList.add('fade-in');
