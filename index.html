@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>愛情故事測驗 | Love Stories Quiz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .fade-in { animation: fadeIn 0.3s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .progress-bar { transition: width 0.3s ease; }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-pink-100 via-purple-50 to-indigo-100">
+    <!-- Start Screen -->
+    <div id="start-screen" class="min-h-screen flex items-center justify-center p-4">
+        <div class="max-w-2xl bg-white rounded-2xl shadow-xl p-8 text-center">
+            <h1 class="text-4xl font-bold bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent mb-4">
+                💕 愛情故事測驗
+            </h1>
+            <p class="text-gray-600 mb-6">
+                基於心理學家 Robert Sternberg 的「愛情故事理論」<br>
+                探索你內心深處的愛情腳本
+            </p>
+            <div class="bg-purple-50 rounded-lg p-4 mb-6 text-left">
+                <h3 class="font-semibold text-purple-800 mb-2">📖 關於這個測驗</h3>
+                <ul class="text-sm text-gray-600 space-y-1">
+                    <li>• 26 種愛情故事類型</li>
+                    <li>• 216 道題目（完整版）或 52 道題目（精簡版）</li>
+                    <li>• 了解你對愛情的潛意識期待</li>
+                    <li>• 約需 15-30 分鐘完成</li>
+                </ul>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button onclick="startQuiz('short')" 
+                    class="px-8 py-3 bg-purple-500 text-white rounded-full hover:bg-purple-600 transition font-medium">
+                    🚀 精簡版 (52題)
+                </button>
+                <button onclick="startQuiz('full')" 
+                    class="px-8 py-3 bg-pink-500 text-white rounded-full hover:bg-pink-600 transition font-medium">
+                    📚 完整版 (224題)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quiz Screen -->
+    <div id="quiz-screen" class="hidden min-h-screen p-4">
+        <div class="max-w-2xl mx-auto">
+            <!-- Progress Bar -->
+            <div class="bg-white rounded-full h-4 mb-6 overflow-hidden shadow">
+                <div id="progress" class="progress-bar h-full bg-gradient-to-r from-pink-500 to-purple-500" style="width: 0%"></div>
+            </div>
+            <p id="progress-text" class="text-center text-gray-500 mb-4 text-sm"></p>
+
+            <!-- Question Card -->
+            <div id="question-card" class="bg-white rounded-2xl shadow-xl p-6 fade-in">
+                <div class="text-xs text-purple-500 font-medium mb-2" id="category-label"></div>
+                <p id="question-en" class="text-lg text-gray-800 mb-2"></p>
+                <p id="question-zh" class="text-gray-500 mb-6"></p>
+
+                <!-- Rating Scale -->
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-xs text-gray-400">完全不符合</span>
+                    <span class="text-xs text-gray-400">完全符合</span>
+                </div>
+                <div id="rating-buttons" class="grid grid-cols-9 gap-2">
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="flex justify-between mt-6">
+                <button onclick="prevQuestion()" id="prev-btn" 
+                    class="px-6 py-2 bg-gray-200 text-gray-600 rounded-full hover:bg-gray-300 transition disabled:opacity-50">
+                    ← 上一題
+                </button>
+                <button onclick="skipQuestion()" 
+                    class="px-6 py-2 text-gray-400 hover:text-gray-600 transition">
+                    跳過
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Screen -->
+    <div id="results-screen" class="hidden min-h-screen p-4">
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-white rounded-2xl shadow-xl p-8">
+                <h2 class="text-3xl font-bold text-center bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent mb-6">
+                    💕 你的愛情故事類型
+                </h2>
+
+                <!-- Top 5 Stories -->
+                <div id="top-stories" class="mb-8"></div>
+
+                <!-- Radar Chart -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-4 text-center">📊 完整輪廓圖</h3>
+                    <div class="relative h-96">
+                        <canvas id="radar-chart"></canvas>
+                    </div>
+                </div>
+
+                <!-- All Scores -->
+                <details class="mb-6">
+                    <summary class="cursor-pointer text-purple-600 hover:text-purple-800 font-medium">
+                        📋 查看所有分數
+                    </summary>
+                    <div id="all-scores" class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm"></div>
+                </details>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button onclick="location.reload()" 
+                        class="px-6 py-2 bg-purple-500 text-white rounded-full hover:bg-purple-600 transition">
+                        🔄 重新測驗
+                    </button>
+                    <button onclick="shareResults()" 
+                        class="px-6 py-2 bg-pink-500 text-white rounded-full hover:bg-pink-600 transition">
+                        📤 分享結果
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
