@@ -328,6 +328,20 @@ function exportResults(format) {
     let mimeType = 'text/plain';
     
     if (format === 'json') {
+        // 建立詳細的回答記錄
+        const detailedAnswers = currentQuestions.map((q, idx) => {
+            const key = `${q.storyId}-${q.itemIndex}`;
+            return {
+                questionIndex: idx + 1,
+                storyId: q.storyId,
+                storyNameZh: q.storyNameZh,
+                categoryZh: q.categoryZh,
+                questionEn: q.en,
+                questionZh: q.zh,
+                answer: answers[key] || null
+            };
+        });
+        
         content = JSON.stringify({
             timestamp: new Date().toISOString(),
             mode: quizMode,
@@ -341,6 +355,7 @@ function exportResults(format) {
                 score: data.average,
                 description: data.descriptionZh
             })),
+            detailedAnswers: detailedAnswers,
             rawAnswers: answers
         }, null, 2);
         filename += '.json';
