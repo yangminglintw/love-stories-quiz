@@ -93,7 +93,7 @@ function renderQuestion() {
         const btn = document.createElement('button');
         btn.className = 'w-10 h-10 rounded-full font-medium transition ';
         
-        const key = `${q.storyId}-${q.itemIndex}`;
+        const key = `q-${q.questionId}`;
         if (answers[key] === i) {
             btn.className += 'bg-purple-500 text-white';
         } else {
@@ -115,8 +115,13 @@ function renderQuestion() {
 // Select rating and advance
 function selectRating(rating) {
     const q = currentQuestions[currentIndex];
-    const key = `${q.storyId}-${q.itemIndex}`;
+    const key = `q-${q.questionId}`;
     answers[key] = rating;
+    
+    // 同時記錄故事分數用的 key
+    const storyKey = `${q.storyId}-${q.itemIndex}`;
+    if (!answers._storyScores) answers._storyScores = {};
+    answers._storyScores[storyKey] = rating;
     
     if (currentIndex < currentQuestions.length - 1) {
         currentIndex++;
@@ -135,8 +140,12 @@ function prevQuestion() {
 
 function skipQuestion() {
     const q = currentQuestions[currentIndex];
-    const key = `${q.storyId}-${q.itemIndex}`;
+    const key = `q-${q.questionId}`;
     answers[key] = 5;
+    
+    const storyKey = `${q.storyId}-${q.itemIndex}`;
+    if (!answers._storyScores) answers._storyScores = {};
+    answers._storyScores[storyKey] = 5;
     
     if (currentIndex < currentQuestions.length - 1) {
         currentIndex++;
@@ -166,8 +175,9 @@ function calculateScores() {
         
         story.items.forEach((item, idx) => {
             const key = `${story.id}-${idx}`;
-            if (answers[key] !== undefined) {
-                storyAnswers.push(answers[key]);
+            const score = answers._storyScores ? answers._storyScores[key] : undefined;
+            if (score !== undefined) {
+                storyAnswers.push(score);
             }
         });
         
