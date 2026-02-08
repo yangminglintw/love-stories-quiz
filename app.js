@@ -39,16 +39,19 @@ function prepareQuestions(mode) {
     
     quizData.stories.forEach(story => {
         if (mode === 'short') {
-            const shuffled = [...story.items].sort(() => Math.random() - 0.5);
-            shuffled.slice(0, 2).forEach((item, idx) => {
+            // 隨機選 2 題，但保留原始索引
+            const indexed = story.items.map((item, idx) => ({...item, originalIndex: idx}));
+            const shuffled = indexed.sort(() => Math.random() - 0.5);
+            shuffled.slice(0, 2).forEach((item) => {
                 questions.push({
                     storyId: story.id,
                     storyName: story.name,
                     storyNameZh: story.nameZh,
                     category: story.category,
                     categoryZh: story.categoryZh,
-                    itemIndex: idx,
-                    ...item
+                    itemIndex: item.originalIndex,
+                    en: item.en,
+                    zh: item.zh
                 });
             });
         } else {
